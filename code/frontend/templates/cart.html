@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - TechMart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🏪 TechMart</div>
+        <div class="navbar-links">
+            <a href="/products">Products</a>
+            <a href="#" onclick="logout(); return false;" style="color: var(--white); text-decoration: none;">Logout</a>
+        </div>
+    </nav>
+    <br><br><br><br>
+    <div class="container">
+        <div id="message"></div>
+
+        <h1 style="margin-bottom: 2rem;">🛒 Shopping Cart</h1>
+
+        <div class="cart-container">
+            <div id="cartItems"></div>
+            <div id="cartTotal" class="cart-total"></div>
+            <button id="checkoutBtn" class="btn btn-primary" style="margin-top: 1rem; max-width: 200px;">Proceed to
+                Checkout</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Success</h2>
+            <p id="modalMessage">Your order has been placed successfully!</p>
+            <button class="btn btn-primary" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+</body>
+
+</html>

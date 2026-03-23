@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - TechMart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🏪 TechMart</div>
+        <div class="navbar-links">
+            <a href="/">Home</a>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <h2 style="text-align: center; color: var(--fade-blue); margin-bottom: 1.5rem;">Create New Account</h2>
+        
+        <div id="message"></div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" name="userId" required>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Full Name</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Full Address</label>
+                <textarea id="address" name="address" rows="3" required style="width: 100%; padding: 0.8rem; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: var(--white); resize: vertical;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Register</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1.5rem;">
+            Already have an account? <a href="/login" style="color: #a6dff6; font-weight: bold;">Login here</a>
+        </p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/registration.js') }}"></script>
+</body>
+</html>
