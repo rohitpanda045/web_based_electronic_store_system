@@ -3,4 +3,5 @@ Werkzeug==2.3.0
 mysql-connector-python==8.0.33
 python-dotenv==1.0.0
 Flask-SQLAlchemy==3.0.3
-PyMySQL==1.0.3
+PyMySQL==1.0.3
+gunicorn
