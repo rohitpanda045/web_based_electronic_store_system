@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - TechMart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🏪 TechMart Admin</div>
+        <div class="navbar-links">
+            <a href="/">Home</a>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <h2 style="text-align: center; color:0; margin-bottom: 1.5rem;">Admin Login</h2>
+        
+        <div id="message"></div>
+
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label for="adminId">Admin ID</label>
+                <input type="text" id="adminId" name="adminId" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Admin Login</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1.5rem;">
+            <a href="/login" style="color: var(--light-blue); font-weight: bold;">User Login</a>
+        </p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin_login.js') }}"></script>
+</body>
+</html>

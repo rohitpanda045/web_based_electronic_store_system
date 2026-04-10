@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TechMart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🏪 TechMart Admin Dashboard</div>
+        <div class="navbar-links">
+            <button onclick="toggleTheme()" class="btn btn-secondary btn-small"
+                style="margin-right: 1rem; padding: 0.3rem 0.6rem; border-radius: 50%;">🌓</button>
+            <a href="#" onclick="logout(); return false;" style="color: var(--white); text-decoration: none;">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="message"></div>
+
+        <div class="admin-header">
+            <h1>Admin Control Panel</h1>
+            <div class="category-management-buttons" style="justify-content: center; margin-top: 1rem;">
+                <button class="btn btn-primary" onclick="showSection('categoriesSection')">🏷️ Categories</button>
+                <button class="btn btn-primary" onclick="showSection('productsSection')">📦 Products</button>
+                <button class="btn btn-primary" onclick="showSection('ordersSection')">🛒 Orders</button>
+                <button class="btn btn-primary" onclick="showSection('deliveredSection')">🚚 Delivered Products</button>
+                <button class="btn btn-primary" onclick="showSection('usersSection')">👥 Users</button>
+                <button class="btn btn-primary" onclick="showSection('analyticsSection')">📊 Analytics</button>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="analyticsSection" class="admin-section" style="display: block;">
+            <h2>📊 Dashboard Analytics</h2>
+            <div id="analyticsContent" class="features-section">
+                <!-- Analytics cards will be loaded here -->
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Total Sales</h3>
+                    <p id="totalSales">₹0.00</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Total Orders</h3>
+                    <p id="totalOrdersCount">0</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Total Users</h3>
+                    <p id="totalUsersCount">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Management Section -->
+        <div id="categoriesSection" class="admin-section" style="display: none;">
+            <h2>🏷️ Manage Categories</h2>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="loadCategories()">Refresh Categories</button>
+                <button class="btn btn-secondary" onclick="openAddCategoryModal()">+ Add New Category</button>
+            </div>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Category Name</th>
+                        <th>Product Count</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="categoriesTableBody">
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Loading categories...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Products Management Section -->
+        <div id="productsSection" class="admin-section" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>📝 Manage Products</h2>
+                <button class="btn btn-secondary" onclick="openAddProductModal()">+ Add New Product</button>
+            </div>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Price (₹)</th>
+                        <th>Discount (%)</th>
+                        <th>Stock</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    <tr>
+                        <td colspan="6" style="text-align: center;">Loading products...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="ordersSection" class="admin-section" style="display: none;">
+            <h2>📦 All Orders</h2>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer Name</th>
+                        <th>Product Names</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <tr>
+                        <td colspan="7" style="text-align: center;">Loading orders...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Users Section -->
+        <div id="usersSection" class="admin-section" style="display: none;">
+            <h2>👥 All Users</h2>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Loading users...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Delivered Products Section -->
+        <div id="deliveredSection" class="admin-section" style="display: none;">
+            <h2>🚚 Delivered Products</h2>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer Name</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Amount (₹)</th>
+                        <th>Order Date</th>
+                    </tr>
+                </thead>
+                <tbody id="deliveredTableBody">
+                    <tr>
+                        <td colspan="6" style="text-align: center;">Loading delivered products...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Success</h2>
+            <p id="modalMessage" style="white-space: pre-wrap; margin-bottom: 1.5rem;"></p>
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <button class="btn btn-primary" onclick="closeModal()" style="min-width: 120px;">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h2 id="confirmTitle">Confirm</h2>
+            <p id="confirmMessage" style="white-space: pre-wrap;"></p>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                <button class="btn btn-primary btn-action" id="confirmYesBtn" style="width: 100%;">Yes</button>
+                <button class="btn btn-secondary btn-action" onclick="closeConfirmModal()"
+                    style="width: 100%;">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div id="addCategoryModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2>➕ Add New Category</h2>
+            <form id="addCategoryForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group">
+                    <label for="newCategoryName"><strong>Category Name:</strong></label>
+                    <input type="text" id="newCategoryName" required placeholder="Enter category name">
+                </div>
+                <div class="form-group">
+                    <label for="newCategoryImage"><strong>Category Image URL:</strong></label>
+                    <input type="url" id="newCategoryImage" placeholder="https://example.com/cat-image.jpg">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                    <button type="submit" class="btn btn-primary btn-action" style="width: 100%;">Add Category</button>
+                    <button type="button" class="btn btn-secondary btn-action" onclick="closeAddCategoryModal()"
+                        style="width: 100%;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2>➕ Add New Product</h2>
+            <form id="addProductForm" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label for="productName"><strong>Product Name:</strong></label>
+                    <input type="text" id="productName" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="price"><strong>Price (₹):</strong></label>
+                    <input type="number" id="price" step="0.01" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="discount"><strong>Discount (%):</strong></label>
+                    <input type="number" id="discount" step="0.01" min="0" max="100" value="0" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="stock"><strong>Stock Quantity:</strong></label>
+                    <input type="number" id="stock" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="category"><strong>Category:</strong></label>
+                    <select id="category" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; background-color: var(--bg-dark); color: var(--text-dark);">
+                        <option value="">Select a category</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="image"><strong>Image URL:</strong></label>
+                    <input type="url" id="image" required placeholder="https://example.com/image.jpg"
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="features"><strong>Features:</strong></label>
+                    <input type="text" id="features" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="warranty"><strong>Warranty:</strong></label>
+                    <input type="text" id="warranty" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                    <button type="submit" class="btn btn-primary btn-action" style="width: 100%;">Add Product</button>
+                    <button type="button" class="btn btn-secondary btn-action" onclick="closeAddProductModal()"
+                        style="width: 100%;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="editProductModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2>✏️ Edit Product</h2>
+            <form id="editProductForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="hidden" id="editProductId">
+                <div>
+                    <label for="editProductName"><strong>Product Name:</strong></label>
+                    <input type="text" id="editProductName" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="editPrice"><strong>Price (₹):</strong></label>
+                    <input type="number" id="editPrice" step="0.01" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="editDiscount"><strong>Discount (%):</strong></label>
+                    <input type="number" id="editDiscount" step="0.01" min="0" max="100" value="0" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="editStock"><strong>Stock Quantity:</strong></label>
+                    <input type="number" id="editStock" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="editFeatures"><strong>Features:</strong></label>
+                    <input type="text" id="editFeatures" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="editWarranty"><strong>Warranty:</strong></label>
+                    <input type="text" id="editWarranty" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                    <button type="submit" class="btn btn-primary btn-action" style="width: 100%;">Update
+                        Product</button>
+                    <button type="button" class="btn btn-secondary btn-action" onclick="closeEditProductModal()"
+                        style="width: 100%;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editCategoryImageModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2>🖼️ Edit Category Image</h2>
+            <form id="editCategoryImageForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="hidden" id="editCategoryTargetName">
+                <div class="form-group">
+                    <label for="editCategoryImage"><strong>New Category Image URL:</strong></label>
+                    <input type="url" id="editCategoryImage" required placeholder="https://example.com/new-image.jpg">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                    <button type="submit" class="btn btn-primary btn-action" style="width: 100%;">Update Image</button>
+                    <button type="button" class="btn btn-secondary btn-action" onclick="closeEditCategoryImageModal()"
+                        style="width: 100%;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin_chatbot.js') }}"></script>
+</body>
+
+</html>

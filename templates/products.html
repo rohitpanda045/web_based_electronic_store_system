@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - TechMart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{{ url_for('static', filename='js/service-worker.js') }}");
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🏪 TechMart</div>
+        <div class="navbar-links">
+            <div class="top-right">
+                <button onclick="toggleTheme()" class="btn btn-secondary btn-small"
+                    style="margin-right: 1rem; padding: 0; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">🌓</button>
+                <span class="cart-icon" onclick="goToCart()" title="Go to Cart">🛒 Cart</span>
+                <a href="#" onclick="openProfile(); return false;"
+                    style="color: var(--white); text-decoration: none;">👤 Profile</a>
+                <a href="#" onclick="logout(); return false;"
+                    style="color: var(--white); text-decoration: none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <br><br><br><br>
+
+    <div class="container">
+        <div id="message"></div>
+
+        <h1 style="color: var(--fade-blue); margin-bottom: 1rem;">Our Products</h1>
+
+        <!-- Category List View -->
+        <div id="categoryListView" class="category-list-view">
+            <h2 style="color: var(--blue); margin-bottom: 1.5rem;">Browse by Category</h2>
+            <div id="categoryList" class="category-grid">
+                <!-- Categories will be loaded here -->
+                <div style="text-align: center; grid-column: 1 / -1; color: #666;">Loading categories...</div>
+            </div>
+        </div>
+
+        <!-- Products View (hidden by default) -->
+        <div id="productsView" class="products-view" style="display: none;">
+            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                <button class="btn btn-secondary" onclick="showCategoryList()" style="margin-right: 1rem;">← Back to
+                    Categories</button>
+                <h2 id="categoryTitle" style="color: var(--blue); margin: 0;"></h2>
+            </div>
+            <div id="productsGrid" class="products-grid"></div>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbotToggle" class="chatbot-toggle">💬</button>
+
+    <!-- Chatbot -->
+    <div id="chatbot" class="chatbot">
+        <div class="chatbot-header">
+            <span>TechMart Assistant</span>
+            <button id="closeChatbot"
+                style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">✕</button>
+        </div>
+        <div id="chatbotBody" class="chatbot-body"></div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything...">
+            <button id="chatbotSend">Send</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Success</h2>
+            <p id="modalMessage">Your order has been placed successfully!</p>
+            <button class="btn btn-primary" onclick="closeModal()" style="width: 100%; margin-top: 1rem;">OK</button>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content" style="max-width: 900px; max-height: 80vh; overflow-y: auto;">
+            <h2>👤 My Profile</h2>
+            <div id="profileInfo" style="margin: 1rem 0; line-height: 1.8;">
+                <p><strong>User ID:</strong> <span id="profileUserId"></span></p>
+                <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+                <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+                <p><strong>Address:</strong> <span id="profileAddress"></span></p>
+            </div>
+
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">📦 My Orders</h3>
+            <div id="profileOrders" style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem;">
+                <p>Loading orders...</p>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                <button class="btn btn-secondary" onclick="openDeliveredModal()" style="flex:1;">📦 Delivered
+                    Orders</button>
+                <button class="btn btn-primary" onclick="closeProfileModal()" style="flex:1;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2>⭐ Write a Review</h2>
+            <form id="reviewForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label for="reviewRating"><strong>Rating (1-5):</strong></label>
+                    <select id="reviewRating" required
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">Select rating</option>
+                        <option value="1">1 - Poor</option>
+                        <option value="2">2 - Fair</option>
+                        <option value="3">3 - Good</option>
+                        <option value="4">4 - Very Good</option>
+                        <option value="5">5 - Excellent</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="reviewComment"><strong>Your Review:</strong></label>
+                    <textarea id="reviewComment" placeholder="Share your thoughts about this product..." required
+                        style="width: 100%; min-height: 120px; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: Arial, sans-serif;"></textarea>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeReviewModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Comparison Modal -->
+    <div id="comparisonModal" class="modal">
+        <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+            <h2>📊 Product Comparison</h2>
+            <div id="comparisonTableContainer" style="overflow-x: auto; margin-top: 1rem;">
+                <!-- Comparison table will be generated here -->
+            </div>
+            <button class="btn btn-primary" onclick="closeComparisonModal()" style="margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <!-- Delivered Products Modal -->
+    <div id="deliveredModal" class="modal">
+        <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+            <h2>📦 Your Delivered Products</h2>
+            <div style="overflow-x: auto;">
+                <table class="orders-table" style="width: 100%; margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deliveredTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" onclick="closeDeliveredModal()" style="margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/products.js') }}"></script>
+</body>
+
+</html>

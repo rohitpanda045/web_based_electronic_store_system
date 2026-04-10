@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{{ url_for('static', filename='service-worker.js') }}");
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🏪 TechMart</div>
+        <div class="navbar-links">
+            <button onclick="toggleTheme()" class="btn btn-secondary btn-small"
+                style="margin-right: 1rem; padding: 0; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">🌓</button>
+            <a href="/">Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="message"></div>
+
+        <div class="hero">
+            <h1>Welcome to TechMart</h1>
+            <p>Your Ultimate Destination for Premium Electronics & Gadgets</p>
+
+            <div style="margin-top: 2rem; padding: 2rem; background: rgba(255, 255, 255, 0.1); border-radius: 10px;">
+                <p style="margin-bottom: 1.5rem;">Experience the latest technology with unbeatable prices and
+                    exceptional service</p>
+            </div>
+
+            <div class="auth-buttons">
+                <a href="/login" class="btn btn-primary">Login</a>
+                <a href="/registration" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast Shipping</h3>
+                <p>Get your products delivered in 3-5 business days</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Secure Payment</h3>
+                <p>100% secure transactions with multiple payment options</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💯</div>
+                <h3>Quality Guarantee</h3>
+                <p>All products come with warranty and quality assurance</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎧</div>
+                <h3>24/7 Support</h3>
+                <p>Our customer support team is always ready to help</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+</body>
+
+</html>
